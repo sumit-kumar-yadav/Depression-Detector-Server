@@ -86,14 +86,21 @@ classifier = NaiveBayesClassifier.train(training_data)
 accuracy = nltk.classify.accuracy(classifier, testing_data)
 
 
-# Saving functions and variables to be exported in "sys" built-in module
-import sys
-sys.funvar = {
+# Save functions and variables to be exported in "pickle" built-in module
+model_objects = {
     "clean_data": clean_data,
     "get_feature_dict": get_feature_dict,
     "classifier": classifier,
     "accuracy": accuracy
 }
+
+import pickle
+pickle_file_path = os.path.join(os.getcwd(), "src/ML", "temp.pkl")
+if os.path.isfile(pickle_file_path):
+    os.remove(pickle_file_path)
+file_obj = open(pickle_file_path, 'wb')
+pickle.dump(model_objects, file_obj)
+file_obj.close()
 
 print("Training is completed.")
 

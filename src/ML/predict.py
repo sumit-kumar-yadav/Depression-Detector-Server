@@ -1,12 +1,18 @@
-
+import model
 import numpy as np
 import pandas as pd
 import nltk
 from nltk.tokenize import word_tokenize
-from model import sys
+import sys
+import os
 
-# from pythonn import clean_data, get_feature_dict, classifier, accuracy in funvar variable
-funvar = sys.funvar
+# from temp.pkl file, load model_objects which was dumped from the model.py file
+import pickle
+pickle_file_path = os.path.join(os.getcwd(), "src/ML", "temp.pkl")
+file_obj = open(pickle_file_path, 'rb')
+model_objects = pickle.load(file_obj)
+print("model_objects***", model_objects)
+file_obj.close()
 
 # Now predict the new data
 # Load data
@@ -19,16 +25,16 @@ for i in range(len(arrayData)):
     inputDocuments.append(word_tokenize(arrayData[i].lower()))
 
 # Clean it
-inputDocuments = [funvar["clean_data"](document) for document in inputDocuments]
+inputDocuments = [model_objects["clean_data"](document) for document in inputDocuments]
 
 # Get feature dictionary format for Naive Bayes classification 
-predection_data_x = [funvar["get_feature_dict"](doc) for doc in inputDocuments]
+predection_data_x = [model_objects["get_feature_dict"](doc) for doc in inputDocuments]
 
 # Save the prediction using
 predection_data_y=[]
 for i in range(len(predection_data_x)):
-    predection_data_y.append(funvar["classifier"].classify(predection_data_x[i]))
+    predection_data_y.append(model_objects["classifier"].classify(predection_data_x[i]))
 
 
 
-print('Predicted data ', str(sys.argv), funvar["accuracy"], predection_data_y[0], inputDocuments[0], funvar)
+print('Predicted data ', str(sys.argv), model_objects["accuracy"], predection_data_y[0], inputDocuments[0], model_objects)
