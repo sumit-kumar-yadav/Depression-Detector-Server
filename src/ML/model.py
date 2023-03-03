@@ -19,37 +19,7 @@ documents = []
 for i in range(len(x_train)):
     documents.append((word_tokenize(x_train[i].lower()) ,y_train[i]))
 
-from nltk.stem import WordNetLemmatizer
-lemmatizer = WordNetLemmatizer()
-
-
-from nltk.corpus import wordnet
-def get_simple_pos(tag):
-    if tag.startswith('J'):
-        return wordnet.ADJ
-    elif tag.startswith('V'):
-        return wordnet.VERB
-    elif tag.startswith('N'):
-        return wordnet.NOUN
-    elif tag.startswith('R'):
-        return wordnet.ADV
-    else:
-        return wordnet.NOUN
-
-from nltk.corpus import stopwords
-import string
-stops = stopwords.words('english') + list(string.punctuation)
-
-from nltk import pos_tag
-def clean_data(words):
-    output_words = []
-    for w in words:
-        if w.lower() not in stops:
-            pos = pos_tag([w])                                 
-            clean_word = lemmatizer.lemmatize(w, get_simple_pos(pos[0][1]))
-            output_words.append(clean_word.lower())
-    return output_words
-
+from clean_data_file import clean_data
 
 import time
 start = time.time()
@@ -87,21 +57,30 @@ accuracy = nltk.classify.accuracy(classifier, testing_data)
 
 
 # Save functions and variables to be exported in "pickle" built-in module
-model_objects = {
-    "clean_data": clean_data,
-    "get_feature_dict": get_feature_dict,
-    "classifier": classifier,
-    "accuracy": accuracy
-}
 
 import pickle
-pickle_file_path = os.path.join(os.getcwd(), "src/ML", "temp.pkl")
-if os.path.isfile(pickle_file_path):
-    os.remove(pickle_file_path)
-file_obj = open(pickle_file_path, 'wb')
-pickle.dump(model_objects, file_obj)
-file_obj.close()
+pickle_file_path2 = os.path.join(os.getcwd(), "src/ML", "temp2.pkl")
+pickle_file_path3 = os.path.join(os.getcwd(), "src/ML", "temp3.pkl")
+pickle_file_path4 = os.path.join(os.getcwd(), "src/ML", "temp4.pkl")
+if os.path.isfile(pickle_file_path2):
+    os.remove(pickle_file_path2)
+if os.path.isfile(pickle_file_path3):
+    os.remove(pickle_file_path3)
+if os.path.isfile(pickle_file_path4):
+    os.remove(pickle_file_path4)
 
-print("Training is completed.")
+file_obj2 = open(pickle_file_path2, 'wb')
+file_obj3 = open(pickle_file_path3, 'wb')
+file_obj4 = open(pickle_file_path4, 'wb')
+
+pickle.dump(features, file_obj2)
+pickle.dump(classifier, file_obj3)
+pickle.dump(accuracy, file_obj4)
+
+file_obj2.close()
+file_obj3.close()
+file_obj4.close()
+
+print("Training is completed. Accuracy is ", accuracy)
 
 

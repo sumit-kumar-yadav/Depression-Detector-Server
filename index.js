@@ -17,6 +17,7 @@ app.use('/', function(req, res){
 
     childMLPredict.stdout.on('data', (data) => {
         console.log(`stdout: ${data}`);
+        console.log("Prediction is : ", (data == 1) ? "Depressedd" : "Not depressed")
     })
     
     childMLPredict.stderr.on('data', (data) => {
