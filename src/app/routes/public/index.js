@@ -3,11 +3,12 @@ const router = express.Router();
 
 
 // Routes
-const dataRoute = require('./routes/temp')
+const dataRoute = require('./general/routes/temp');
+const authRoute = require('./authentication');
 
-
-
+// temp route -- remove this
 router.use('/get', dataRoute);
 
+router.use('/auth', authRoute);
 
 module.exports = router;

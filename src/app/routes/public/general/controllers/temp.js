@@ -1,4 +1,4 @@
-const { api, apiError } = require('../../../helpers/format-response');
+const { api, apiError } = require('../../../../helpers/format_response');
 const { spawn } = require('child_process');
 const path = require('path');
 const { rejects } = require('assert');

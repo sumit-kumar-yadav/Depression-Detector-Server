@@ -2,13 +2,18 @@ const express = require('express');
 const { spawn } = require('child_process');
 const path = require('path');
 
-const app = express();
-const port = process.env.PORT || 8000;
-
+// Connect to MongoBD database
+const db = require('./src/app/engine/config/mongoose');
 
 // Api route 
 const apiRoute = require('./src/app/routes');
 
+const app = express();
+const port = process.env.PORT || 8000;
+
+app.use(express.urlencoded({extended: false}));
+
+// Root route 
 app.get('/', function(req, res){
     res.send("Server is running fine");
 })
