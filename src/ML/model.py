@@ -81,6 +81,6 @@ file_obj2.close()
 file_obj3.close()
 file_obj4.close()
 
-print("Training is completed. Accuracy is ", accuracy)
+print(accuracy)
 
 
