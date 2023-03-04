@@ -26,7 +26,7 @@ file_obj4.close()
 
 # Now predict the new data
 # Load data
-rawData = "i never make her separate from me because i don t ever want her to feel like i m ashamed with her"
+rawData = str(sys.argv[1]);
 arrayData = [rawData]
 
 # Convert it into document which will be array of array of words using

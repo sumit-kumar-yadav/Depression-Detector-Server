@@ -7,7 +7,7 @@ const DataController = require('../controllers/temp');
 
 // Temp --> remove this
 router.route('/prediction')
-    .get(DataController.getPrediction);
+    .post(DataController.postGetPrediction);
 
 
 module.exports = router;

@@ -4,14 +4,16 @@ const path = require('path');
 const { rejects } = require('assert');
 
 
-module.exports.getPrediction = async (req, res) => {
+module.exports.postGetPrediction = async (req, res) => {
 
     try {
         // Predict the data
         console.log("Predicting the result")
 
+        const input = req.body.input;
+
         const predict = new Promise((resolve, reject) => {
-            const childMLPredict = spawn('python', [path.join(__dirname, '../../../..//ML/predict.py'), 'Sumit']);
+            const childMLPredict = spawn('python', [path.join(__dirname, '../../../../../ML/predict.py'), input]);
         
             childMLPredict.stdout.on('data', (data) => {
                 console.log(`stdout: ${data}`);

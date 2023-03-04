@@ -1,11 +1,10 @@
 const jwt = require('jsonwebtoken');
 const env = require('../engine/config/env');
 
-module.exports.generateAuthToken = async (payload) => {
+module.exports.generateAuthToken = (payload) => {
     try {
 
-        const token = jwt.sign(payload, env.jwt_secret, {expiresIn:  `${env.auth_token_expiry_hour}h`});
-        return token;
+        return jwt.sign(payload, env.jwt_secret, {expiresIn:  `${env.auth_token_expiry_hour}h`});
 
     } catch (error) {
         throw String(error);

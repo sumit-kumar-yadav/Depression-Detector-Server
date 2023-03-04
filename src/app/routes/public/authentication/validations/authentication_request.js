@@ -4,19 +4,6 @@ const User = require('../../../../engine/models/user');
 module.exports.validate = (reqType) => {
 
     switch (reqType) {
-        case 'postSigninEmail': {
-            return [
-                body('email')
-                    .optional()
-                    .toLowerCase()
-                    .isEmail().withMessage("Please enter the valid email address"),
-                body('password')
-                    .notEmpty().withMessage('Please enter the password').bail(),
-                body('phone_number')
-                    .optional()
-                    .matches(/^\d{10}$/).withMessage('Please enter the valid phone number')
-            ]
-        }
 
         case 'postSignupEmail': {
             return [
@@ -30,13 +17,13 @@ module.exports.validate = (reqType) => {
                     .matches(/^([a-zA-Z]+?)([-\s'][a-zA-Z]+)*?$/).withMessage('Please enter the valid last name'),
                 body('email')
                     .exists().withMessage("Please enter the email address").bail()
+                    .toLowerCase()
                     .isEmail().withMessage("Please enter the valid email address")
                     .custom(async (value, { req }) => {
-                        return User.findOne({ where: { email: value } }).then(user => {
-                            if (user) {
-                                return Promise.reject('Email is already taken');
-                            }
-                        });
+                        const user = await User.findOne({ email: value });
+                        if (user) {
+                            return Promise.reject('Email is already taken');
+                        }
                     }),
                 body('phone_number')
                     .optional()
@@ -63,6 +50,20 @@ module.exports.validate = (reqType) => {
                             throw "Incorrect Timezone"
                         }
                     })
+            ]
+        }
+
+        case 'postSigninEmail': {
+            return [
+                body('email')
+                    .exists().withMessage("Please enter the email address").bail()
+                    .toLowerCase()
+                    .isEmail().withMessage("Please enter the valid email address"),
+                body('password')
+                    .notEmpty().withMessage('Please enter the password').bail(),
+                // body('phone_number')
+                //     .optional()
+                //     .matches(/^\d{10}$/).withMessage('Please enter the valid phone number')
             ]
         }
 
