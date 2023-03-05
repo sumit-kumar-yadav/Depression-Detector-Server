@@ -1,6 +1,7 @@
 const express = require('express');
 const { spawn } = require('child_process');
 const path = require('path');
+const logger = require('morgan');
 
 // Connect to MongoBD database
 const db = require('./src/app/engine/config/mongoose');
@@ -11,6 +12,10 @@ const apiRoute = require('./src/app/routes');
 const app = express();
 const port = process.env.PORT || 8000;
 
+app.use(logger('dev'));
+
+// Express parser to parse the form data into js object
+app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
 // Root route 

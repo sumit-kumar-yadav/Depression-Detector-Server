@@ -4,21 +4,30 @@ const User = require('../../../../engine/models/user');
 const { generateAuthToken } = require('../../../../helpers/jwt_token_generator');
 const { api, apiError } = require('../../../../helpers/format_response');
 
-module.exports.postSignup = async (req, res) => {
+const postSignup = async (req, res) => {
     try {
         
-        const { first_name, last_name, email, password, gender, timezone } = req.body;
+        const { 
+            first_name, last_name, 
+            email, password, 
+            gender, timezone,
+            phone_code, phone_number,
+            confirm_password, 
+
+        } = req.body;
+
+        if(password != confirm_password) throw "Password mismatched";
 
         const userData = {
             uuid: uuidv4(),
             first_name,
             last_name,
             email,
-            phone_code: req.body.phone_code ? req.body.phone_code : null,
-            phone_number: req.body.phone_number ? req.body.phone_number : null,
+            phone_code: phone_code ? phone_code : null,
+            phone_number: phone_number ? phone_number : null,
             password: await bcrypt.hash(password, 8),
             status: 'active',
-            timezone: req.body.timezone ? req.body.timezone : 'Asia/Kolkata',
+            timezone: timezone ? timezone : 'Asia/Kolkata',
             gender
         }
 
@@ -40,7 +49,7 @@ module.exports.postSignup = async (req, res) => {
 }
 
 
-module.exports.postSignin = async (req, res) => {
+const postSignin = async (req, res) => {
     try {
         
         const { email, password } = req.body;
@@ -68,4 +77,9 @@ module.exports.postSignin = async (req, res) => {
     } catch (e) {
         return apiError(String(e), res, {}, 500);
     }
+}
+
+module.exports = {
+    postSignup,
+    postSignin,
 }
