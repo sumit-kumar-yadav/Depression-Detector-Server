@@ -62,7 +62,7 @@ const putClientDetails = async (req, res) => {
 
         const updatedClientDetails = await ClientDetail.findByIdAndUpdate(clientDetails.id, clientData, { new: true });
 
-        return api("Details added successfully", res, updatedClientDetails);
+        return api("Details updated successfully", res, updatedClientDetails);
 
     } catch (e) {
         return apiError(String(e), res, {}, 500);
