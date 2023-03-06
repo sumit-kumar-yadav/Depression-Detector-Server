@@ -1,5 +1,7 @@
 const env = require('../config/env');
 const User = require('../models/user');
+const { apiError } = require('../../helpers/format_response');
+const jwt = require('jsonwebtoken');
 
 
 const authenticateUser = async (req, res, next) => {

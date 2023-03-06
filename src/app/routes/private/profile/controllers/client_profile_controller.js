@@ -1,24 +1,31 @@
 const ClientDetail = require('../../../../engine/models/client_details');
 const { v4 : uuidv4 } = require('uuid');
+const { api, apiError } = require('../../../../helpers/format_response');
 
 
 const postClientDetails = async (req, res) => {
     try {
         const { street, city, pincode, state, country } = req.body;
 
+        const detailsExist = await ClientDetail.findOne({user: req.user._id});
+
+        if(detailsExist) throw "Client details already exist."
+
         // TODO: Upload avatar
 
 
         const clientData = { 
             uuid: uuidv4(),
-            user: req.user.id,
+            user: req.user._id,
             // avatar,
             account_type : 'public',
-            street, 
-            city, 
-            pincode, 
-            state, 
-            country 
+            address: {
+                street, 
+                city, 
+                pincode, 
+                state, 
+                country
+            } 
         }
 
         const clientDetails = await ClientDetail.create(clientData);
@@ -32,23 +39,25 @@ const postClientDetails = async (req, res) => {
 
 const putClientDetails = async (req, res) => {
     try {
-        const { street, city, pincode, state, country } = req.body;
+        const { account_type, street, city, pincode, state, country } = req.body;
 
         // TODO: Update avatar
 
 
-        const clientDetails = await ClientDetail.findById({user: req.user.id});
+        const clientDetails = await ClientDetail.findOne({user: req.user._id});
 
         if(!clientDetails) throw "Client details not found.";
 
         const clientData = { 
             // avatar,
             account_type: account_type ? account_type : clientDetails.account_type,
-            street: street ? street : clientDetails.street, 
-            city: city ? city : clientDetails.city, 
-            pincode: pincode ? pincode : clientDetails.pincode, 
-            state : state ? state : clientDetails.state, 
-            country: country ? country : clientDetails.country
+            address: {
+                street: street ? street : clientDetails.address.street, 
+                city: city ? city : clientDetails.address.city, 
+                pincode: pincode ? pincode : clientDetails.address.pincode, 
+                state : state ? state : clientDetails.address.state, 
+                country: country ? country : clientDetails.address.country
+            }
         }
 
         const updatedClientDetails = await ClientDetail.findByIdAndUpdate(clientDetails.id, clientData, { new: true });

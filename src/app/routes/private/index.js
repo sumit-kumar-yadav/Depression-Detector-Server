@@ -3,10 +3,10 @@ const router = express.Router();
 
 
 // Routes
-const emailAuthRoute = require('./routes/email_auth_route');
+const profileRoute = require('./profile');
 
 
-router.use('/email', emailAuthRoute);
 
+router.use('/profile', profileRoute);
 
 module.exports = router;
