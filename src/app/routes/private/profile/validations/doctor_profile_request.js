@@ -1,4 +1,5 @@
 const { body, param } = require('express-validator');
+const { index } = require('../../../../engine/models/address');
 
 
 module.exports.validate = (reqType) => {
@@ -45,24 +46,65 @@ module.exports.validate = (reqType) => {
                     .optional()
                     .isURL().withMessage(`Please enter a valid URL`)
                     .isLength({ min: 0 }).withMessage(`Please enter a valid URL`),
-                body('opening_hours')
+                body('off_days')
                     .optional()
-                    .isArray({ min: 1, max: 7 }).withMessage('Please enter at least 1 opening day')
-                    .custom(async (value, { req }) => {
-                    
+                    .isArray({ min: 0, max: 7 }).withMessage('Incorrect off days')
+                    .custom((value, { req }) => {
                         const weekDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-
-                        value.forEach(element => {
-                            if(weekDays.indexOf(element.day) == -1) 
-                                throw `Day should be ${weekDays}`;
-                            if(element.working_day != 'yes' || element.working_day != 'no') 
-                                throw "Working day should be either yes or no";
-                            if((element.working_day == 'yes' && !element.periods) || (element.working_day == 'yes' && element.periods.isLength <= 0)) 
-                                throw "Please enter at least 1 opening time period.";
-                            // To do
+                        const isVisited = [false, false, false, false, false, false, false];
+                        value.forEach(day => {
+                            let index = weekDays.indexOf(day);
+                            if(index != -1 && !isVisited[index]){
+                                isVisited[index] = true;
+                            }else{
+                                throw `Working days should be ${weekDays}`;
+                            }
                         });
-
                     })
+                // body('opening_hours')
+                //     .optional()
+                //     .isArray({ min: 1, max: 7 }).withMessage('Please enter at least 1 opening day')
+                //     .custom(async (value, { req }) => {
+                    
+                //         const weekDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
+                //         value.forEach(element => {
+                //             // Check the correct keys in each object of the array
+                //             const receivedObjKeys = Object.keys(element);
+                //             const requiredObjKeys = ["day", "working_day", "periods"];
+                //             if(!(receivedObjKeys.length == requiredObjKeys.length && receivedObjKeys.every((key, i) => key === requiredObjKeys[i])))
+                //                 throw "Incorrect keys of opening_hours"
+
+                //             // Check the correct day value 
+                //             if(weekDays.indexOf(element.day) == -1) 
+                //                 throw `Day should be ${weekDays}`;
+
+                //             // Check the correct working_day value 
+                //             if(element.working_day != 'yes' || element.working_day != 'no') 
+                //                 throw "Working day should be either yes or no";
+
+                //             // Check if the periods is an array or not
+                //             if(!Array.isArray(element.periods))
+                //                 throw "periods should be array";
+                            
+                //             // Check if it's working day without any period 
+                //             if((element.working_day == 'yes' && element.periods.length <= 0)) 
+                //                 throw "Please enter at least 1 opening time period.";
+                //             if(element.working_day == 'yes' && element.periods.length >= 1){
+                //                 element.periods.forEach(period => {
+                //                     const periodKeys = Object.keys(period);
+                //                     const requiredPeriodKeys = ["start", "end"]; 
+                //                     if(!(periodKeys.length == requiredPeriodKeys.length && periodKeys.every((key, i) => key === requiredPeriodKeys[i])))
+                //                         throw "Incorrect period keys"
+                //                 });
+                //             }
+
+                //             // If it's non working day then
+                //             if(element.working_day == 'no' && element.periods.length != 0)
+                //                 throw  `periods ahould be an empty array on ${element.day} as it's non working day`
+                //         });
+
+                //     })
 
             ]
         }

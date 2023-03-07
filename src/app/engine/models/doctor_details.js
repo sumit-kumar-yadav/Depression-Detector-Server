@@ -38,16 +38,22 @@ const doctorDetailSchema = new mongoose.Schema({
         type: Number
     },
     website: String,
-    opening_hours: [
-        {
-            day: {type: Date}, //mon - sun,
-            working_day: { type: String, enum: ["yes", "no"] },
-            periods: [{
-                start: {type: Date},  // Store only time
-                end: {type: Date}     // Store only time
-            }]
-        }
-    ],
+    off_days: {
+        type: [String]
+    },
+    // opening_hours: [
+    //     {
+    //         day: {
+    //             type: String, 
+    //             enum: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    //         },
+    //         working_day: { type: String, enum: ["yes", "no"] },
+    //         periods: [{
+    //             start: {type: Date},  // Store only time
+    //             end: {type: Date}     // Store only time
+    //         }]
+    //     }
+    // ],
     isVerified: {  // should be verified by the admins
         type: String,
         required: true,
