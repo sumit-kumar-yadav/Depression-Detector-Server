@@ -1,7 +1,7 @@
 const { v4 : uuidv4 } = require('uuid');
 const bcrypt = require('bcryptjs');
 const User = require('../../../../engine/models/user');
-const { generateAuthToken } = require('../../../../helpers/jwt_token_generator');
+const { generateAuthToken, deleteExpiredTokens } = require('../../../../helpers/handle_jwt_token');
 const { api, apiError } = require('../../../../helpers/format_response');
 
 const postSignup = async (req, res) => {
@@ -23,11 +23,11 @@ const postSignup = async (req, res) => {
             first_name,
             last_name,
             email,
-            phone_code: phone_code ? phone_code : null,
-            phone_number: phone_number ? phone_number : null,
+            phone_code: phone_code || null,
+            phone_number: phone_number || null,
             password: await bcrypt.hash(password, 8),
             status: 'active',
-            timezone: timezone ? timezone : 'Asia/Kolkata',
+            timezone: timezone || 'Asia/Kolkata',
             gender
         }
 
@@ -41,7 +41,10 @@ const postSignup = async (req, res) => {
             gender: user.gender
         });
 
-        return api('Signed up successfully', res, { token: authToken });
+        user.auth_tokens.push({ token: authToken});
+        await user.save();
+
+        return api('Signed up successfully', res, { token: authToken }, 201);
 
     } catch (error) {
         return apiError(String(error), res, {}, 500);
@@ -71,6 +74,12 @@ const postSignin = async (req, res) => {
             email: user.email,
             gender: user.gender
         });
+
+        user.auth_tokens.push({ token: authToken});
+        await user.save();
+
+        // Delete the Expired token
+        await deleteExpiredTokens(user._id);
 
         return api('Signed in successfully', res, { token: authToken });
 

@@ -10,30 +10,32 @@ const authenticateUser = async (req, res, next) => {
         // Get token from header and verify it
         let headerToken = req.header('Authorization');
 
-        if (!headerToken) throw "Authentication Failed, Please ensure you have logged in."
+        if (!headerToken) throw "Authentication Failed"
 
         const token = headerToken.replace('Bearer ', '');
 
-        if(!token) throw "Invalid token";
+        if(!token) throw "Authentication Failed";
 
-        const verifiedToken = jwt.verify(token, env.jwt_secret);
-
-        if (!verifiedToken) throw "Authentication Failed, Please ensure you have logged in."
+        let decoded;
+        jwt.verify(token, env.jwt_secret, (err, decodedData) => {
+            if(err) throw "Invalid auth token. Please Sign in...";
+            else decoded = decodedData;
+        });
 
         // Set user data in res.locals, to be used in controllers
-        var user = await User.findOne({ uuid: verifiedToken.uuid });
-
+        var user = await User.findOne({ uuid: decoded.uuid });
         if (!user) throw "User not found. Please sign up."
 
-        req.user = user.toJSON();
+        user = await User.findOne({ uuid: decoded.uuid, 'auth_tokens.token': token });
+        if (!user) throw "Session expired. Please login again..."
 
-        // res.locals.user = req.user;
+        req.user = user;
+        req.token = token
 
         next();
 
     } catch (e) {
-
-        return apiError(String(e), res, {}, 500);
+        return apiError(String(e), res, {});
     }
 }
 

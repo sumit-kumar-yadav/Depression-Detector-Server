@@ -14,7 +14,7 @@ const port = process.env.PORT || 8000;
 
 app.use(logger('dev'));
 
-// Express parser to parse the form data into js object
+// Express parser to parse the json data
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 

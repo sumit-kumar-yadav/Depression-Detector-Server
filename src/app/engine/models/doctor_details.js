@@ -13,6 +13,7 @@ const doctorDetailSchema = new mongoose.Schema({
         ref: 'User'
     },
     avatar: String,
+    dob: Date,
     address: address,
     degree: {
         type: Array,

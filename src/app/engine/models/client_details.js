@@ -13,6 +13,7 @@ const clientDetailSchema = new mongoose.Schema({
         ref: 'User'
     },
     avatar: String,
+    dob: Date,
     account_type: {
         type: String,
         required: true,

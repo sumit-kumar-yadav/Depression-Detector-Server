@@ -1,14 +1,14 @@
 
-module.exports.api = async (message, res, data) => {
+module.exports.api = async (message, res, data, status = 200) => {
 
     let response = {};
 
     response.error = false;
     response.message = message;
-    response.status = 200;
+    response.status = status;
     response.body = data;
 
-    return res.status(200).json(response);
+    return res.status(status).json(response);
 }
 
 module.exports.apiError = async (message, res, data, status = 406) => {
