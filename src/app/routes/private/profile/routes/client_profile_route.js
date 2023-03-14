@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { throwValidationError } = require('../../../../engine/exceptions/validation_exception');
+const { throwValidationError, throwMulterUploadError } = require('../../../../engine/exceptions/validation_exception');
 const { validate } = require('../validations/client_profile_request');
 const { imageUpload } = require('../../../../helpers/upload_helper');
 
@@ -10,10 +10,10 @@ const clientProfileController = require('../controllers/client_profile_controlle
 
 
 router.route('/details')
-    .post(imageUpload, validate('postClientDetails'), throwValidationError, clientProfileController.postClientDetails);
+    .post(imageUpload, throwMulterUploadError, validate('postClientDetails'), throwValidationError, clientProfileController.postClientDetails);
 
 router.route('/details')
-    .put(validate('putClientDetails'), throwValidationError, clientProfileController.putClientDetails);
+    .put(imageUpload, throwMulterUploadError, validate('putClientDetails'), throwValidationError, clientProfileController.putClientDetails);
 
 
 

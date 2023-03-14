@@ -24,3 +24,23 @@ module.exports.throwValidationError = (req, res, next) => {
 
     next();
 }
+
+module.exports.throwMulterUploadError = (err, req, res, next) => {
+    if(err) return apiError(err.message, res, {}, 400);
+    else next();
+
+    // Used from 
+    // app.use((err, req, res, next) => {
+    //     if (err instanceof multer.MulterError) { // Multer-specific errors
+    //         return res.status(418).json({
+    //             err_code: err.code,
+    //             err_message: err.message,
+    //         });
+    //     } else { // Handling errors for any other cases from whole application
+    //         return res.status(500).json({
+    //             err_code: 409,
+    //             err_message: "Something went wrong!"
+    //         });
+    //     }
+    // });
+}
