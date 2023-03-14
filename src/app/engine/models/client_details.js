@@ -12,7 +12,7 @@ const clientDetailSchema = new mongoose.Schema({
         type:  mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-    avatar: String,
+    avatar: Buffer,
     dob: Date,
     account_type: {
         type: String,

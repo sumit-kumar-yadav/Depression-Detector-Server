@@ -20,7 +20,7 @@ module.exports.validate = (reqType) => {
                     .notEmpty().withMessage('Please enter the state name').bail()
                     .isLength({ min: 3, max: 30 }).withMessage(`State can't be less than 3 characters and greater than 30.`),
                 body('country')
-                    .notEmpty().withMessage('Please enter the password').bail()
+                    .notEmpty().withMessage('Please enter the country').bail()
                     .isLength({ min: 3, max: 20 }).withMessage(`Country name can't be less than 3 characters and greater than 20.`).bail(),
             ]
         }

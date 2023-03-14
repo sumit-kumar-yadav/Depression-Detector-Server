@@ -5,19 +5,17 @@ const { api, apiError } = require('../../../../helpers/format_response');
 
 const postClientDetails = async (req, res) => {
     try {
-        const { street, city, pincode, state, country } = req.body;
+        const { street, city, pincode, state, country, dob, avatar } = req.body;
 
         const detailsExist = await ClientDetail.findOne({user: req.user._id});
 
         if(detailsExist) throw "Client details already exist."
 
-        // TODO: Upload avatar
-
-
         const clientData = { 
             uuid: uuidv4(),
             user: req.user._id,
-            // avatar,
+            avatar: req.file ? req.file.buffer : null,
+            dob: dob ? new Date(dob) : null,   // dob can be '1990-03-13'
             account_type : 'public',
             address: {
                 street, 
