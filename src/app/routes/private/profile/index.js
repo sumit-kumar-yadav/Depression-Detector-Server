@@ -3,12 +3,15 @@ const router = express.Router();
 
 
 // Routes
-const clientProfileRoute = require('./routes/client_profile_route');
 const userProfileRoute = require('./routes/user_profile_route');
+const clientProfileRoute = require('./routes/client_profile_route');
+const doctorProfileRoute = require('./routes/doctor_profile_route');
 
+
+router.use('/user', userProfileRoute);
 
 router.use('/client', clientProfileRoute);
 
-router.use('/user', userProfileRoute);
+router.use('/doctor', doctorProfileRoute);
 
 module.exports = router;

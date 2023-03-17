@@ -18,7 +18,7 @@ const doctorDetailSchema = new mongoose.Schema({
     degree: {
         type: Array,
         default: []
-      },
+    },
     highest_qualification: {
         type: String,
         required: true
@@ -56,10 +56,9 @@ const doctorDetailSchema = new mongoose.Schema({
     //     }
     // ],
     isVerified: {  // should be verified by the admins
-        type: String,
+        type: Boolean,
         required: true,
-        enum: ["verified", "not verified"],
-        default: "not verified"
+        default: false
     }
 
 

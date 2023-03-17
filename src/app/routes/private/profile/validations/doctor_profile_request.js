@@ -1,5 +1,4 @@
 const { body, param } = require('express-validator');
-const { index } = require('../../../../engine/models/address');
 
 
 module.exports.validate = (reqType) => {
@@ -111,7 +110,61 @@ module.exports.validate = (reqType) => {
 
         case 'putDoctorDetails': {
             return [
+                body('street')
+                    .optional()
+                    .isLength({ min: 3, max: 50 }).withMessage(`Street name can't be less than 3 characters and greater than 50.`),
+                body('city')
+                    .optional()
+                    .isLength({ min: 3, max: 30 }).withMessage(`City name can't be less than 3 characters and greater than 30.`),
+                body('pincode')
+                    .optional()
+                    .isLength({ min: 3, max: 15 }).withMessage(`Pincode can't be less than 3 characters and greater than 15.`),
+                body('state')
+                    .optional()
+                    .isLength({ min: 3, max: 30 }).withMessage(`State can't be less than 3 characters and greater than 30.`),
+                body('country')
+                    .optional()
+                    .isLength({ min: 3, max: 20 }).withMessage(`Country name can't be less than 3 characters and greater than 20.`).bail(),
+                body('degree')
+                    .optional()
+                    .isArray({ min: 1, max: 20 }).withMessage('Please enter at least 1 degree'),
+                body('highest_qualification')
+                    .optional()
+                    .isLength({ min: 2, max: 20 }).withMessage(`Highest qualification can't be less than 2 characters and greater than 20.`).bail(),
+                body('specialist')
+                    .optional()
+                    .isLength({ min: 2, max: 20 }).withMessage(`Specilization name can't be less than 2 characters and greater than 20.`).bail(),
+                body('experience_in_yrs')
+                    .optional()
+                    .isNumeric().withMessage('Only Decimals allowed').bail()
+                    .isLength({ min: 0, max: 100 }).withMessage(`Please enter a valid experience in years.`),
+                body('per_session_fee')
+                    .optional()
+                    .isLength({ min: 0 }).withMessage(`Please enter valid per session fee`),
+                body('discount')
+                    .optional()
+                    .isLength({ min: 0 }).withMessage(`Discount can't be negative value`),
+                body('website')
+                    .optional()
+                    .isURL().withMessage(`Please enter a valid URL`)
+                    .isLength({ min: 0 }).withMessage(`Please enter a valid URL`),
+                body('off_days')
+                    .optional()
+                    .isArray({ min: 0, max: 7 }).withMessage('Incorrect off days')
+                    .custom((value, { req }) => {
+                        const weekDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+                        const isVisited = [false, false, false, false, false, false, false];
+                        value.forEach(day => {
+                            let index = weekDays.indexOf(day);
+                            if(index != -1 && !isVisited[index]){
+                                isVisited[index] = true;
+                            }else{
+                                throw `Working days should be ${weekDays}`;
+                            }
+                        });
+                    })
                 
+
             ]
         }
 

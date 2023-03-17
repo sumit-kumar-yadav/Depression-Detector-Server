@@ -49,7 +49,7 @@ const putClientDetails = async (req, res) => {
         if(!clientDetails) throw "Client details not found.";
 
         const clientData = { 
-            dob: dob ? new Date(dob) : null,
+            dob: dob ? new Date(dob) : clientDetails.dob,
             account_type: account_type || clientDetails.account_type,
             address: {
                 street: street || clientDetails.address.street, 
