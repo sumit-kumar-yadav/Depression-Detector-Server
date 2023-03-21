@@ -1,5 +1,23 @@
+const UserDetail = require('../../../../engine/models/user_details');
 const { api, apiError } = require('../../../../helpers/format_response');
 
+
+const getUserProfile = async (req, res) => {
+    try {
+        
+        const userDetail = await UserDetail.findOne({user: req.user._id})
+                                .populate('user_details');
+        
+        const user = req.user.toJSON();
+        user.role = userDetail.role;
+        user.details = userDetail.user_details;
+
+        return api("Users details fetched successfully", res, user);
+
+    } catch (e) {
+        return apiError(String(e), res, {}, 500);
+    }
+}
 
 const getLogout = async (req, res) => {
     try {
@@ -33,6 +51,7 @@ const getLogoutAll = async (req, res) => {
 
 
 module.exports = {
+    getUserProfile,
     getLogout,
     getLogoutAll
 }

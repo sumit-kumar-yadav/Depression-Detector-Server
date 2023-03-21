@@ -1,4 +1,5 @@
 const DoctorDetail = require('../../../../engine/models/doctor_details');
+const UserDetail = require('../../../../engine/models/user_details');
 const { v4 : uuidv4 } = require('uuid');
 const { api, apiError } = require('../../../../helpers/format_response');
 const { processBufferImage } = require('../../../../helpers/upload_helper');
@@ -6,11 +7,11 @@ const { processBufferImage } = require('../../../../helpers/upload_helper');
 
 const postDoctorDetails = async (req, res) => {
     try {
-        const { street, city, pincode, state, country, dob, avatar } = req.body;
+        const { street, city, pincode, state, country, dob } = req.body;
 
-        const detailsExist = await DoctorDetail.findOne({user: req.user._id});
+        const detailsExist = await UserDetail.findOne({user: req.user._id});
 
-        if(detailsExist) throw "Doctor details already exist."
+        if(detailsExist) throw "Your details already exist."
 
 
         const doctorData = { 
@@ -41,6 +42,13 @@ const postDoctorDetails = async (req, res) => {
         }
 
         const doctorDetails = await DoctorDetail.create(doctorData);
+
+        await UserDetail.create({
+            user: req.user._id,
+            role: "doctor",
+            user_details: doctorDetails._id,
+            onModel: 'DoctorDetail'
+        })
 
         return api("Details added successfully", res, doctorDetails);
 

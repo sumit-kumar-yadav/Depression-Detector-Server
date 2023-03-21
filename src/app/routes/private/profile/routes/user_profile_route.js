@@ -7,6 +7,10 @@ const router = express.Router();
 // Controllers
 const userProfileController = require('../controllers/user_profile_controller');
 
+
+// Fetch the user profile
+router.route('/profile').get(userProfileController.getUserProfile);
+
 // Logout from a device 
 router.route('/logout').get(userProfileController.getLogout);
 

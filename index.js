@@ -2,6 +2,7 @@ const express = require('express');
 const { spawn } = require('child_process');
 const path = require('path');
 const logger = require('morgan');
+const cors = require('cors');
 
 // Connect to MongoBD database
 const db = require('./src/app/engine/config/mongoose');
@@ -13,6 +14,8 @@ const app = express();
 const port = process.env.PORT || 8000;
 
 app.use(logger('dev'));
+
+app.use(cors())
 
 // Express parser to parse the json data
 app.use(express.json());

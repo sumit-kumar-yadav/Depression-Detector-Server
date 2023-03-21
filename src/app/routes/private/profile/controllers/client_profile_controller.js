@@ -1,4 +1,5 @@
 const ClientDetail = require('../../../../engine/models/client_details');
+const UserDetail = require('../../../../engine/models/user_details');
 const { v4 : uuidv4 } = require('uuid');
 const { api, apiError } = require('../../../../helpers/format_response');
 const { processBufferImage } = require('../../../../helpers/upload_helper');
@@ -8,9 +9,9 @@ const postClientDetails = async (req, res) => {
     try {
         const { street, city, pincode, state, country, dob, avatar } = req.body;
 
-        const detailsExist = await ClientDetail.findOne({user: req.user._id});
+        const detailsExist = await UserDetail.findOne({user: req.user._id});
 
-        if(detailsExist) throw "Client details already exist."
+        if(detailsExist) throw "Your details already exist."
 
         const clientData = { 
             uuid: uuidv4(),
@@ -32,6 +33,13 @@ const postClientDetails = async (req, res) => {
         }
 
         const clientDetails = await ClientDetail.create(clientData);
+
+        await UserDetail.create({
+            user: req.user._id,
+            role: "client",
+            user_details: clientDetails._id,
+            onModel: 'ClientDetail'
+        })
 
         return api("Details added successfully", res, clientDetails);
 

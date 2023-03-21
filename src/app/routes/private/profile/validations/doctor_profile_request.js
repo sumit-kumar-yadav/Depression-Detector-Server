@@ -47,7 +47,7 @@ module.exports.validate = (reqType) => {
                     .isLength({ min: 0 }).withMessage(`Please enter a valid URL`),
                 body('off_days')
                     .optional()
-                    .isArray({ min: 0, max: 7 }).withMessage('Incorrect off days')
+                    .isArray({ min: 0, max: 7 }).withMessage('Incorrect off days').bail()
                     .custom((value, { req }) => {
                         const weekDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
                         const isVisited = [false, false, false, false, false, false, false];
