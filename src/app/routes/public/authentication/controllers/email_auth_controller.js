@@ -1,6 +1,7 @@
 const { v4 : uuidv4 } = require('uuid');
 const bcrypt = require('bcryptjs');
 const User = require('../../../../engine/models/user');
+const UserDetail = require('../../../../engine/models/user_details');
 const { generateAuthToken, deleteExpiredTokens } = require('../../../../helpers/handle_jwt_token');
 const { api, apiError } = require('../../../../helpers/format_response');
 
@@ -81,7 +82,18 @@ const postSignin = async (req, res) => {
         // Delete the Expired token
         await deleteExpiredTokens(user._id);
 
-        return api('Signed in successfully', res, { token: authToken });
+        // Send all the details of the logged-in user
+        const userDetail = await UserDetail.findOne({user: user._id})
+                                .populate('user_details');
+        
+        let userData = { 
+            token: authToken,
+            ...user.toJSON(),
+            role: userDetail.role,
+            details: userDetail.user_details
+        };
+
+        return api('Signed in successfully', res, userData);
 
     } catch (e) {
         return apiError(String(e), res, {}, 500);
