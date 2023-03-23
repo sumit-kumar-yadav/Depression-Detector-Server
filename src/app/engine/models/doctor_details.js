@@ -12,7 +12,7 @@ const doctorDetailSchema = new mongoose.Schema({
         type:  mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-    avatar: String,
+    avatar: Buffer,
     dob: Date,
     address: address,
     degree: {

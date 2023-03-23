@@ -47,8 +47,8 @@ module.exports.validate = (reqType) => {
                     .isLength({ min: 0 }).withMessage(`Please enter a valid URL`),
                 body('off_days')
                     .optional()
-                    .isArray({ min: 0, max: 7 }).withMessage('Incorrect off days').bail()
-                    .custom((value, { req }) => {
+                    .isArray({ min: 0, max: 7 }).withMessage('off_days should be an array').bail()
+                    .custom(async (value, { req }) => {
                         const weekDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
                         const isVisited = [false, false, false, false, false, false, false];
                         value.forEach(day => {
@@ -56,9 +56,10 @@ module.exports.validate = (reqType) => {
                             if(index != -1 && !isVisited[index]){
                                 isVisited[index] = true;
                             }else{
-                                throw `Working days should be ${weekDays}`;
+                                throw `Off days can be only ${weekDays}`;
                             }
                         });
+                        return;
                     })
                 // body('opening_hours')
                 //     .optional()
@@ -150,8 +151,8 @@ module.exports.validate = (reqType) => {
                     .isLength({ min: 0 }).withMessage(`Please enter a valid URL`),
                 body('off_days')
                     .optional()
-                    .isArray({ min: 0, max: 7 }).withMessage('Incorrect off days')
-                    .custom((value, { req }) => {
+                    .isArray({ min: 0, max: 7 }).withMessage('off_days should be an array')
+                    .custom(async (value, { req }) => {
                         const weekDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
                         const isVisited = [false, false, false, false, false, false, false];
                         value.forEach(day => {
@@ -159,9 +160,10 @@ module.exports.validate = (reqType) => {
                             if(index != -1 && !isVisited[index]){
                                 isVisited[index] = true;
                             }else{
-                                throw `Working days should be ${weekDays}`;
+                                throw `Off days can be only ${weekDays}`;
                             }
                         });
+                        return;
                     })
                 
 

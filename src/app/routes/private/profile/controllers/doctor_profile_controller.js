@@ -32,7 +32,7 @@ const postDoctorDetails = async (req, res) => {
             per_session_fee: req.body.per_session_fee,
             discount: req.body.discount || 0,
             website: req.body.website || null,
-            off_days: req.body.off_days || [],
+            off_days: req.body.off_days || [],  // Arrray
 
         }
 
@@ -65,7 +65,7 @@ const putDoctorDetails = async (req, res) => {
         if(!doctorDetails) throw "Doctor details not found.";
 
         const doctorData = { 
-            dob: dob ? new Date(dob) : doctorDetails.dob,
+            dob: req.body.dob ? new Date(req.body.dob) : doctorDetails.dob,
             address: {
                 street: req.body.street || doctorDetails.address.street, 
                 city: req.body.city || doctorDetails.address.city, 
