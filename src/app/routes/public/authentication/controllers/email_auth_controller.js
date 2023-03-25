@@ -89,8 +89,8 @@ const postSignin = async (req, res) => {
         let userData = { 
             token: authToken,
             ...user.toJSON(),
-            role: userDetail.role,
-            details: userDetail.user_details
+            role: userDetail ? userDetail.role : null,
+            details: userDetail ? userDetail.user_details : null
         };
 
         return api('Signed in successfully', res, userData);
