@@ -45,7 +45,14 @@ const postSignup = async (req, res) => {
         user.auth_tokens.push({ token: authToken});
         await user.save();
 
-        return api('Signed up successfully', res, { token: authToken }, 201);
+        let resData = { 
+            token: authToken,
+            ...user.toJSON(),
+            role: null,
+            details: null
+        };
+
+        return api('Signed up successfully', res, resData, 201);
 
     } catch (error) {
         return apiError(String(error), res, {}, 500);
@@ -86,14 +93,14 @@ const postSignin = async (req, res) => {
         const userDetail = await UserDetail.findOne({user: user._id})
                                 .populate('user_details');
         
-        let userData = { 
+        let resData = { 
             token: authToken,
             ...user.toJSON(),
             role: userDetail ? userDetail.role : null,
             details: userDetail ? userDetail.user_details : null
         };
 
-        return api('Signed in successfully', res, userData);
+        return api('Signed in successfully', res, resData);
 
     } catch (e) {
         return apiError(String(e), res, {}, 500);
