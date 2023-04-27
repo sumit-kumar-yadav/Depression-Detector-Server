@@ -34,29 +34,29 @@ app.listen(port, function(err){
         console.log(`Server is running on port: ${port}`);
         
         // Train the machine learning model (command --> npm run dev)
-        if(process.argv[2] == 'train'){
-            console.log("Please wait... Model is being trained");
-            trainModel();
-        }
+        // if(process.argv[2] == 'train'){
+        //     console.log("Please wait... Model is being trained");
+        //     trainModel();
+        // }
 
     }
 });
 
-function trainModel(){
+// function trainModel(){
 
-    const childModelPrep = spawn('python', [path.join(__dirname, './src/ML/model.py'), 'Sumit']);
+//     const childModelPrep = spawn('python', [path.join(__dirname, './src/ML/model.py'), 'Sumit']);
 
-    childModelPrep.stdout.on('data', (data) => {
-        console.log(`stdout: Training is completed. Accuracy is ${data}`);
-    })
+//     childModelPrep.stdout.on('data', (data) => {
+//         console.log(`stdout: Training is completed. Accuracy is ${data}`);
+//     })
     
-    childModelPrep.stderr.on('data', (data) => {
-        console.log("Error while training the model");
-        console.error(`stderr: ${data}`);
-    })
+//     childModelPrep.stderr.on('data', (data) => {
+//         console.log("Error while training the model");
+//         console.error(`stderr: ${data}`);
+//     })
     
-    childModelPrep.on('close', (code) => {
-        console.log(`Child process exited with code ${code}`);
-    })
+//     childModelPrep.on('close', (code) => {
+//         console.log(`Child process exited with code ${code}`);
+//     })
     
-}
+// }
