@@ -13,7 +13,7 @@ module.exports.postGetPrediction = async (req, res) => {
         const input = req.body.input;
 
         const predict = new Promise((resolve, reject) => {
-            const childMLPredict = spawn('python', [path.join(__dirname, '../../../../../ML/predict.py'), input]);
+            const childMLPredict = spawn('python3', [path.join(__dirname, '../../../../../ML/predict.py'), input]);
         
             childMLPredict.stdout.on('data', (data) => {
                 console.log(`stdout: ${data}`);

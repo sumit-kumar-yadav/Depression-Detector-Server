@@ -44,7 +44,7 @@ app.listen(port, function(err){
 
 function trainModel(){
 
-    const childModelPrep = spawn('python', [path.join(__dirname, './src/ML/model.py'), 'Sumit']);
+    const childModelPrep = spawn('python3', [path.join(__dirname, './src/ML/model.py'), 'Sumit']);
 
     childModelPrep.stdout.on('data', (data) => {
         console.log(`stdout: Training is completed. Accuracy is ${data}`);
