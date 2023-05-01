@@ -44,19 +44,41 @@ app.listen(port, function(err){
 
 function trainModel(){
 
-    const childModelPrep = spawn('python', [path.join(__dirname, './src/ML/depression/model.py'), 'Sumit']);
+    function trainDepressionModel(){
+        const childModelPrep = spawn('python', [path.join(__dirname, './src/ML/depression/model.py'), 'Sumit']);
 
-    childModelPrep.stdout.on('data', (data) => {
-        console.log(`stdout: Training is completed. Accuracy is ${data}`);
-    })
+        childModelPrep.stdout.on('data', (data) => {
+            console.log(`stdout: Training is completed. Accuracy is ${data}`);
+        })
+        
+        childModelPrep.stderr.on('data', (data) => {
+            console.log("Error while training the model");
+            console.error(`stderr: ${data}`);
+        })
+        
+        childModelPrep.on('close', (code) => {
+            console.log(`Child process exited with code ${code}`);
+        })
+    }
+    function trainAnxietyModel(){
+        const childModelPrep = spawn('python', [path.join(__dirname, './src/ML/anxiety/model.py'), 'Sumit']);
+
+        childModelPrep.stdout.on('data', (data) => {
+            console.log(`stdout: Anxiety training is completed. Accuracy is ${data}`);
+        })
+        
+        childModelPrep.stderr.on('data', (data) => {
+            console.log("Error while training anxiety model");
+            console.error(`stderr: ${data}`);
+        })
+        
+        childModelPrep.on('close', (code) => {
+            console.log(`Child process exited with code ${code} (Anxiety)`);
+        })
+    }
+    trainDepressionModel();
+    trainAnxietyModel();
+
     
-    childModelPrep.stderr.on('data', (data) => {
-        console.log("Error while training the model");
-        console.error(`stderr: ${data}`);
-    })
-    
-    childModelPrep.on('close', (code) => {
-        console.log(`Child process exited with code ${code}`);
-    })
     
 }
