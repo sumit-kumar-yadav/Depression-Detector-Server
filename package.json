@@ -4,8 +4,8 @@
   "description": "This is a server of Web Application which detects whether a person is in depression or not using Machine Learning",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js",
-    "dev": "nodemon index.js train",
+    "start": "node index.js",
+    "dev": "node index.js train",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Sumit Yadav",
