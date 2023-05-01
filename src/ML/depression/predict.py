@@ -7,9 +7,9 @@ import os
 
 # from temp.pkl file, load model_objects which was dumped from the model.py file
 import pickle
-pickle_file_path2 = os.path.join(os.getcwd(), "src/ML", "temp2.pkl")
-pickle_file_path3 = os.path.join(os.getcwd(), "src/ML", "temp3.pkl")
-pickle_file_path4 = os.path.join(os.getcwd(), "src/ML", "temp4.pkl")
+pickle_file_path2 = os.path.join(os.getcwd(), "src/ML/depression", "temp2.pkl")
+pickle_file_path3 = os.path.join(os.getcwd(), "src/ML/depression", "temp3.pkl")
+pickle_file_path4 = os.path.join(os.getcwd(), "src/ML/depression", "temp4.pkl")
 
 file_obj2 = open(pickle_file_path2, 'rb')
 file_obj3 = open(pickle_file_path3, 'rb')

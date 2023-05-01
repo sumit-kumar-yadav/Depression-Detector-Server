@@ -5,7 +5,7 @@ import os
 
 
 # Python os path join method
-data_path = os.path.join(os.getcwd(), "src/ML", "depression_data.csv")
+data_path = os.path.join(os.getcwd(), "src/ML/depression", "depression_data.csv")
 
 # Load the depression data from the csv file
 df = pd.read_csv(data_path)
@@ -59,9 +59,9 @@ accuracy = nltk.classify.accuracy(classifier, testing_data)
 # Save functions and variables to be exported in "pickle" built-in module
 
 import pickle
-pickle_file_path2 = os.path.join(os.getcwd(), "src/ML", "temp2.pkl")
-pickle_file_path3 = os.path.join(os.getcwd(), "src/ML", "temp3.pkl")
-pickle_file_path4 = os.path.join(os.getcwd(), "src/ML", "temp4.pkl")
+pickle_file_path2 = os.path.join(os.getcwd(), "src/ML/depression", "temp2.pkl")
+pickle_file_path3 = os.path.join(os.getcwd(), "src/ML/depression", "temp3.pkl")
+pickle_file_path4 = os.path.join(os.getcwd(), "src/ML/depression", "temp4.pkl")
 if os.path.isfile(pickle_file_path2):
     os.remove(pickle_file_path2)
 if os.path.isfile(pickle_file_path3):
