@@ -45,7 +45,7 @@ app.listen(port, function(err){
 function trainModel(){
 
     function trainDepressionModel(){
-        const childModelPrep = spawn('python', [path.join(__dirname, './src/ML/depression/model.py'), 'Sumit']);
+        const childModelPrep = spawn('python3', [path.join(__dirname, './src/ML/depression/model.py'), 'Sumit']);
 
         childModelPrep.stdout.on('data', (data) => {
             console.log(`stdout: Training is completed. Accuracy is ${data}`);
@@ -61,7 +61,7 @@ function trainModel(){
         })
     }
     function trainAnxietyModel(){
-        const childModelPrep = spawn('python', [path.join(__dirname, './src/ML/anxiety/model.py'), 'Sumit']);
+        const childModelPrep = spawn('python3', [path.join(__dirname, './src/ML/anxiety/model.py'), 'Sumit']);
 
         childModelPrep.stdout.on('data', (data) => {
             console.log(`stdout: Anxiety training is completed. Accuracy is ${data}`);
