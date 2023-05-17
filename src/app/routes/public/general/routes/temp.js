@@ -10,6 +10,8 @@ router.route('/prediction')
     .post(DataController.postGetPrediction);
 router.route('/prediction/anxiety')
     .post(DataController.postGetAnxietyPrediction);
+router.route('/prediction/stress')
+    .post(DataController.postGetStressPrediction);
 
 
 module.exports = router;

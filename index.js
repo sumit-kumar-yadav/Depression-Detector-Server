@@ -76,9 +76,25 @@ function trainModel(){
             console.log(`Child process exited with code ${code} (Anxiety)`);
         })
     }
+    function trainStressModel(){
+        const childModelPrep = spawn('python3', [path.join(__dirname, './src/ML/stress/model.py'), 'Samruddhi']);
+
+        childModelPrep.stdout.on('data', (data) => {
+            console.log(`stdout: Stress training is completed. Accuracy is ${data}`);
+        })
+        
+        childModelPrep.stderr.on('data', (data) => {
+            console.log("Error while training stress model");
+            console.error(`stderr: ${data}`);
+        })
+        
+        childModelPrep.on('close', (code) => {
+            console.log(`Child process exited with code ${code} (Stress)`);
+        })
+    }
     trainDepressionModel();
     trainAnxietyModel();
-
+    trainStressModel();
     
     
 }

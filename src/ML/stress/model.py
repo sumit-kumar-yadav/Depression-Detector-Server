@@ -5,7 +5,7 @@ import os
 
 
 # Python os path join method
-data_path = os.path.join(os.getcwd(), "src/ML/stress", "stress_data.csv")
+data_path = os.path.join(os.getcwd(), "src/ML/stress", "stress_dataset.csv")
 
 # Load the depression data from the csv file
 df = pd.read_csv(data_path)
