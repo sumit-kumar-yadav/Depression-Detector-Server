@@ -3,7 +3,7 @@ const { spawn } = require('child_process');
 const path = require('path');
 
 
-const postGetPrediction = async (req, res) => {
+const postGetDepressionPrediction = async (req, res) => {
 
     try {
 
@@ -46,5 +46,5 @@ const postGetPrediction = async (req, res) => {
 }
 
 module.exports = {
-    postGetPrediction
+    postGetDepressionPrediction
 }
