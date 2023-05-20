@@ -7,7 +7,7 @@ const { processBufferImage } = require('../../../../helpers/upload_helper');
 
 const postDoctorDetails = async (req, res) => {
     try {
-        const { street, city, pincode, state, country, dob } = req.body;
+        const { street, city, pincode, state, country, latitude, longitude, dob } = req.body;
 
         const detailsExist = await UserDetail.findOne({user: req.user._id});
 
@@ -23,7 +23,11 @@ const postDoctorDetails = async (req, res) => {
                 city, 
                 pincode, 
                 state, 
-                country
+                country,
+                location: {
+                    type: 'Point',
+                    coordinates: [parseFloat(longitude), parseFloat(latitude)]
+                }
             },
             degree: req.body.degree,  // Arrray
             highest_qualification: req.body.highest_qualification,
@@ -71,7 +75,13 @@ const putDoctorDetails = async (req, res) => {
                 city: req.body.city || doctorDetails.address.city, 
                 pincode: req.body.pincode || doctorDetails.address.pincode, 
                 state: req.body.state || doctorDetails.address.state, 
-                country: req.body.country || doctorDetails.country
+                country: req.body.country || doctorDetails.country,
+                location: (latitude && longitude) ? {
+                    type: 'Point',
+                    coordinates: [parseFloat(longitude), parseFloat(latitude)]
+                }
+                : clientDetails.address.location
+                
             },
             degree: req.body.degree || doctorDetails.degree,  // Arrray
             highest_qualification: req.body.highest_qualification,

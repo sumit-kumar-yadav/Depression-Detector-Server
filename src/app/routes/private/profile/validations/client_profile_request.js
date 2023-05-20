@@ -22,6 +22,22 @@ module.exports.validate = (reqType) => {
                 body('country')
                     .notEmpty().withMessage('Please enter the country').bail()
                     .isLength({ min: 3, max: 20 }).withMessage(`Country name can't be less than 3 characters and greater than 20.`).bail(),
+                body('latitude')
+                    .notEmpty().withMessage('Invalid Latitude')
+                    .isNumeric().withMessage('Invalid Latitude')
+                    .custom(async (value, { req }) => {
+                        // Check if latitude and longitude are within valid ranges
+                        if (value < -90 || value > 90) 
+                            return Promise.reject("Invalid latitude.");
+                    }),
+                body('longitude')
+                    .notEmpty().withMessage('Invalid Longitude')
+                    .isNumeric().withMessage('Invalid Longitude')
+                    .custom(async (value, { req }) => {
+                        // Check if latitude and longitude are within valid ranges
+                        if (value < -180 || value > 180) 
+                            return Promise.reject("Invalid longitude.");
+                    }),
             ]
         }
 
@@ -45,6 +61,22 @@ module.exports.validate = (reqType) => {
                 body('country')
                     .optional()
                     .isLength({ min: 3, max: 20 }).withMessage(`Country name can't be less than 3 characters and greater than 20.`).bail(),
+                body('latitude')
+                    .optional()
+                    .isNumeric().withMessage('Invalid Latitude')
+                    .custom(async (value, { req }) => {
+                        // Check if latitude and longitude are within valid ranges
+                        if (value < -90 || value > 90) 
+                            return Promise.reject("Invalid latitude.");
+                    }),
+                body('longitude')
+                    .optional()
+                    .isNumeric().withMessage('Invalid Longitude')
+                    .custom(async (value, { req }) => {
+                        // Check if latitude and longitude are within valid ranges
+                        if (value < -180 || value > 180) 
+                            return Promise.reject("Invalid longitude.");
+                    }),
             ]
         }
 

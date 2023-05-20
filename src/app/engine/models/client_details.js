@@ -25,8 +25,8 @@ const clientDetailSchema = new mongoose.Schema({
     timestamps: true
 });
 
-
-
+// To abe able to run geo queries of mongoosex
+clientDetailSchema.index({ 'address.location': '2dsphere' });
 
 const ClientDetail = mongoose.model('ClientDetail', clientDetailSchema);
 

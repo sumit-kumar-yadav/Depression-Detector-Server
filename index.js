@@ -48,7 +48,7 @@ function trainModel(){
         const childModelPrep = spawn('python3', [path.join(__dirname, './src/ML/depression/model.py'), 'Sumit']);
 
         childModelPrep.stdout.on('data', (data) => {
-            console.log(`stdout: Training is completed. Accuracy is ${data}`);
+            console.log(`stdout: Depression Training is completed. Accuracy is ${data}`);
         })
         
         childModelPrep.stderr.on('data', (data) => {

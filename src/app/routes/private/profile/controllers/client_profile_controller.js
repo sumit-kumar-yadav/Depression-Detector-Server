@@ -7,7 +7,7 @@ const { processBufferImage } = require('../../../../helpers/upload_helper');
 
 const postClientDetails = async (req, res) => {
     try {
-        const { street, city, pincode, state, country, dob, avatar } = req.body;
+        const { street, city, pincode, state, country, latitude, longitude, dob } = req.body;
 
         const detailsExist = await UserDetail.findOne({user: req.user._id});
 
@@ -23,7 +23,11 @@ const postClientDetails = async (req, res) => {
                 city, 
                 pincode, 
                 state, 
-                country
+                country,
+                location: {
+                    type: 'Point',
+                    coordinates: [parseFloat(longitude), parseFloat(latitude)]
+                }
             } 
         }
 
@@ -50,7 +54,7 @@ const postClientDetails = async (req, res) => {
 
 const putClientDetails = async (req, res) => {
     try {
-        const { account_type, street, city, pincode, state, country, dob } = req.body;
+        const { account_type, street, city, pincode, state, country, latitude, longitude, dob } = req.body;
 
         const clientDetails = await ClientDetail.findOne({user: req.user._id});
 
@@ -64,7 +68,12 @@ const putClientDetails = async (req, res) => {
                 city: city || clientDetails.address.city, 
                 pincode: pincode || clientDetails.address.pincode, 
                 state : state || clientDetails.address.state, 
-                country: country || clientDetails.address.country
+                country: country || clientDetails.address.country,
+                location: (latitude && longitude) ? {
+                    type: 'Point',
+                    coordinates: [parseFloat(longitude), parseFloat(latitude)]
+                }
+                : clientDetails.address.location
             }
         }
 
@@ -79,6 +88,7 @@ const putClientDetails = async (req, res) => {
         return api("Details updated successfully", res, updatedClientDetails, 201);
 
     } catch (e) {
+        console.log(e)
         return apiError(String(e), res, {}, 500);
     }
 }
