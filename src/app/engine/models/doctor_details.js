@@ -15,6 +15,18 @@ const doctorDetailSchema = new mongoose.Schema({
     avatar: Buffer,
     dob: Date,
     address: address,
+    location: {
+        type: {
+          type: String,
+          enum: ['Point'],
+          default: 'Point',
+          required: true
+        },
+        coordinates: {
+          type: [Number],  // [longitude, latitude]
+          required: true
+        }
+    },
     degree: {
         type: Array,
         default: []
@@ -68,7 +80,7 @@ const doctorDetailSchema = new mongoose.Schema({
 
 
 // To abe able to run geo queries of mongoosex
-doctorDetailSchema.index({ 'address.location': '2dsphere' });
+doctorDetailSchema.index({ 'location': '2dsphere' });
 
 const DoctorDetail = mongoose.model('DoctorDetail', doctorDetailSchema);
 

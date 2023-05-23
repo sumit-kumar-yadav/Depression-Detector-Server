@@ -23,11 +23,11 @@ const postDoctorDetails = async (req, res) => {
                 city, 
                 pincode, 
                 state, 
-                country,
-                location: {
-                    type: 'Point',
-                    coordinates: [parseFloat(longitude), parseFloat(latitude)]
-                }
+                country
+            },
+            location: {
+                type: 'Point',
+                coordinates: [parseFloat(longitude), parseFloat(latitude)]
             },
             degree: req.body.degree,  // Arrray
             highest_qualification: req.body.highest_qualification,
@@ -64,6 +64,7 @@ const postDoctorDetails = async (req, res) => {
 const putDoctorDetails = async (req, res) => {
     try {
 
+        const { latitude, longitude } = req.body;
         const doctorDetails = await DoctorDetail.findOne({user: req.user._id});
 
         if(!doctorDetails) throw "Doctor details not found.";
@@ -75,14 +76,12 @@ const putDoctorDetails = async (req, res) => {
                 city: req.body.city || doctorDetails.address.city, 
                 pincode: req.body.pincode || doctorDetails.address.pincode, 
                 state: req.body.state || doctorDetails.address.state, 
-                country: req.body.country || doctorDetails.country,
-                location: (latitude && longitude) ? {
-                    type: 'Point',
-                    coordinates: [parseFloat(longitude), parseFloat(latitude)]
-                }
-                : clientDetails.address.location
-                
+                country: req.body.country || doctorDetails.country
             },
+            location: (latitude && longitude) ? {
+                type: 'Point',
+                coordinates: [parseFloat(longitude), parseFloat(latitude)]
+            }   : clientDetails.location,
             degree: req.body.degree || doctorDetails.degree,  // Arrray
             highest_qualification: req.body.highest_qualification,
             specialist: req.body.specialist,
