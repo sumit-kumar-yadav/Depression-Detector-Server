@@ -32,13 +32,14 @@ const putUserPassword = async (req, res) => {
         if (new_password !== confirm_password) 
             throw "Passwords do not match";
         
-        req.user.password = new_password;
-        req.user.save();
+        req.user.password = await bcrypt.hash(new_password, 8);
+        await req.user.save();
 
         return api("Password changed successfully", res, {});
 
 
     } catch (e) {
+        console.log(e)
         return apiError(String(e), res, {}, 500);
     }
 }
