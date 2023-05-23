@@ -1,3 +1,4 @@
+const bcrypt = require('bcryptjs');
 const UserDetail = require('../../../../engine/models/user_details');
 const { api, apiError } = require('../../../../helpers/format_response');
 
@@ -13,6 +14,29 @@ const getUserProfile = async (req, res) => {
         user.details = userDetail.user_details;
 
         return api("Users details fetched successfully", res, user);
+
+    } catch (e) {
+        return apiError(String(e), res, {}, 500);
+    }
+}
+
+const putUserPassword = async (req, res) => {
+    try {
+
+        const { old_password, new_password, confirm_password } = req.body;
+
+        const isMatch = await bcrypt.compare(old_password, req.user.password);
+
+        if (!isMatch) throw "Incorrect password";
+
+        if (new_password !== confirm_password) 
+            throw "Passwords do not match";
+        
+        req.user.password = new_password;
+        req.user.save();
+
+        return api("Password changed successfully", res, {});
+
 
     } catch (e) {
         return apiError(String(e), res, {}, 500);
@@ -52,6 +76,7 @@ const getLogoutAll = async (req, res) => {
 
 module.exports = {
     getUserProfile,
+    putUserPassword,
     getLogout,
     getLogoutAll
 }

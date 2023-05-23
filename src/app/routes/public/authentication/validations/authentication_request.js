@@ -30,7 +30,7 @@ module.exports.validate = (reqType) => {
                     .matches(/^\d{10}$/).withMessage('Please enter the valid phone number'),
                 body('password')
                     .notEmpty().withMessage('Please enter the password').bail()
-                    .isLength({ min: 6 }).withMessage('Password must be 6 or more characters').bail()
+                    .isLength({ min: 6, max: 15 }).withMessage('Password must be between 6 and 15 characters').bail()
                     .matches(/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!@$#%]).*$/).withMessage('Weak password. Password must include atleast 1 upper, 1 lowercase, 1 number and a special characters.'),
                 body('gender')
                     .notEmpty().withMessage('Please enter the gender').bail()

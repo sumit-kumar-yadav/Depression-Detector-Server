@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-// const { throwValidationError } = require('../../../../engine/exceptions/validation_exception');
-// const { validate } = require('../validations/client_profile_request');
+const { throwValidationError } = require('../../../../engine/exceptions/validation_exception');
+const { validate } = require('../validations/user_profile_request');
 
 // Controllers
 const userProfileController = require('../controllers/user_profile_controller');
@@ -11,10 +11,11 @@ const userProfileController = require('../controllers/user_profile_controller');
 // Fetch the user profile
 router.route('/profile').get(userProfileController.getUserProfile);
 
-// Logout from a device 
+router.route('/change/password')
+    .put(validate('putUserPassword'), throwValidationError, userProfileController.putUserPassword);
+
 router.route('/logout').get(userProfileController.getLogout);
 
-// Logout from all the devices
 router.route('/logout/all').get(userProfileController.getLogoutAll);
 
 
