@@ -24,12 +24,16 @@ const postClientDetails = async (req, res) => {
                 city, 
                 pincode, 
                 state, 
-                country,
-                location: {
-                    type: 'Point',
-                    coordinates: [parseFloat(longitude), parseFloat(latitude)]
-                }
-            } 
+                country
+            },
+            location: (latitude && longitude) ? {
+                type: 'Point',
+                coordinates: [parseFloat(longitude), parseFloat(latitude)]
+            }: {
+                type: 'Point',
+                coordinates: [0, 0]
+            },
+            is_location_turned_on: (latitude && longitude) ? true : false
         }
 
         // If image is present
@@ -71,13 +75,14 @@ const putClientDetails = async (req, res) => {
                 city: city || clientDetails.address.city, 
                 pincode: pincode || clientDetails.address.pincode, 
                 state : state || clientDetails.address.state, 
-                country: country || clientDetails.address.country,
-                location: (latitude && longitude) ? {
-                    type: 'Point',
-                    coordinates: [parseFloat(longitude), parseFloat(latitude)]
-                }
-                : clientDetails.address.location
-            }
+                country: country || clientDetails.address.country
+            },
+            location: (latitude && longitude) ? {
+                type: 'Point',
+                coordinates: [parseFloat(longitude), parseFloat(latitude)]
+            }   : clientDetails.location,
+            is_location_turned_on: (latitude && longitude) ? true : false,
+
         }
 
         // If image is present

@@ -19,14 +19,25 @@ const clientDetailSchema = new mongoose.Schema({
         required: true,
         enum: ["private", "public"]
     },
-    address: address
+    address: address,
+    location: {
+        type: {
+          type: String,
+          enum: ['Point'],
+          default: 'Point',
+        },
+        coordinates: {
+          type: [Number],  // [longitude, latitude]
+        }
+    },
+    is_location_turned_on: Boolean
 
 }, {
     timestamps: true
 });
 
 // To abe able to run geo queries of mongoosex
-clientDetailSchema.index({ 'address.location': '2dsphere' });
+clientDetailSchema.index({ 'location': '2dsphere' });
 
 const ClientDetail = mongoose.model('ClientDetail', clientDetailSchema);
 
