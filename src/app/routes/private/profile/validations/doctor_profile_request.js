@@ -23,7 +23,7 @@ module.exports.validate = (reqType) => {
                     .notEmpty().withMessage('Please enter the password').bail()
                     .isLength({ min: 3, max: 20 }).withMessage(`Country name can't be less than 3 characters and greater than 20.`).bail(),
                 body('latitude')
-                    .notEmpty().withMessage('Invalid Latitude')
+                    .notEmpty().withMessage('Invalid Latitude').bail()
                     .isNumeric().withMessage('Invalid Latitude')
                     .custom(async (value, { req }) => {
                         // Check if latitude and longitude are within valid ranges
@@ -31,7 +31,7 @@ module.exports.validate = (reqType) => {
                             return Promise.reject("Invalid latitude.");
                     }),
                 body('longitude')
-                    .notEmpty().withMessage('Invalid Longitude')
+                    .notEmpty().withMessage('Invalid Longitude').bail()
                     .isNumeric().withMessage('Invalid Longitude'),
                 body('degree')
                     .notEmpty().withMessage('Please enter the degree').bail()

@@ -67,7 +67,8 @@ const doctorDetailSchema = new mongoose.Schema({
 });
 
 
-
+// To abe able to run geo queries of mongoosex
+doctorDetailSchema.index({ 'address.location': '2dsphere' });
 
 const DoctorDetail = mongoose.model('DoctorDetail', doctorDetailSchema);
 

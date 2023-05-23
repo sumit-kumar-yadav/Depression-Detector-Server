@@ -1,5 +1,6 @@
 const ClientDetail = require('../../../../engine/models/client_details');
 const UserDetail = require('../../../../engine/models/user_details');
+const ClientHealth = require('../../../../engine/models/client_health');
 const { v4 : uuidv4 } = require('uuid');
 const { api, apiError } = require('../../../../helpers/format_response');
 const { processBufferImage } = require('../../../../helpers/upload_helper');
@@ -37,6 +38,8 @@ const postClientDetails = async (req, res) => {
         }
 
         const clientDetails = await ClientDetail.create(clientData);
+
+        await ClientHealth.create({user: req.user._id});
 
         await UserDetail.create({
             user: req.user._id,
