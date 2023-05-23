@@ -42,10 +42,12 @@ const postGetAnxietyPrediction = async (req, res) => {
                     else clientHealth.mental_status.anxiety = false;
                     
                     await clientHealth.save();
+
+                    data = (data == 1) ? "Anxiety" : "Not anxiety";
+                    return api("Success", res, data);
+
                 })()
                 
-                data = (data == 1) ? "Anxiety" : "Not anxiety";
-                return api("Success", res, data);
             })
             .catch(data => {
                 return apiError(String(data), res, {}, 500);

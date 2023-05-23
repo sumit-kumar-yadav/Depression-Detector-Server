@@ -41,10 +41,11 @@ const postGetDepressionPrediction = async (req, res) => {
                     else clientHealth.mental_status.depression = false;
                     
                     await clientHealth.save();
+
+                    data = (data == 1) ? "Depressed" : "Not depressed";
+                    return api("Success", res, data);
                 })()
 
-                data = (data == 1) ? "Depressed" : "Not depressed";
-                return api("Success", res, data);
             })
             .catch(data => {
                 return apiError(String(data), res, {}, 500);

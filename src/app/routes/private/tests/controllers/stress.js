@@ -41,10 +41,11 @@ const postGetStressPrediction = async (req, res) => {
                     else clientHealth.mental_status.stress = false;
                     
                     await clientHealth.save();
+
+                    data = (data == 1) ? "Stressed" : "Not stressed";
+                    return api("Success", res, data);
                 })()
 
-                data = (data == 1) ? "Stressed" : "Not stressed";
-                return api("Success", res, data);
             })
             .catch(data => {
                 return apiError(String(data), res, {}, 500);
