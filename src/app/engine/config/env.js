@@ -4,7 +4,14 @@ const development = {
     db: 'mental_health',
     mongodbAtlasUrl: process.env.MENTAL_HEALTH_MONGO_DEV_URL,
     jwt_secret: 'Avengers',
-    auth_token_expiry_hour: 24
+    auth_token_expiry_hour: 24,
+    smtp: {
+        service: "gmail",
+        auth: {
+            user: 'dummyemail@gmail.com',
+            pass: 'dummypassword'
+        }
+    }
 }
 
 const production = {
