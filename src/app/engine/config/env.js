@@ -8,8 +8,8 @@ const development = {
     smtp: {
         service: "gmail",
         auth: {
-            user: 'dummyemail@gmail.com',
-            pass: 'dummypassword'
+            user: process.env.MENTAL_HEALTH_EMAIL,
+            pass: process.env.MENTAL_HEALTH_EMAIL_PASS
         }
     }
 }

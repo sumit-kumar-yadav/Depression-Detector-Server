@@ -8,7 +8,7 @@ const { api, apiError } = require('../../../../helpers/format_response');
 const { sendOtp } = require('../../../../emails/mailers/otp_mailer');
 
 
-const verifyEmail = async (email, otp, res) => {
+const verifyEmail = async (email, otp) => {
     try {
         let authOtp = await AuthOtp.findOne({
             username: email,
@@ -48,7 +48,7 @@ const postSignup = async (req, res) => {
 
         } = req.body;
 
-        let isOtpVerified = await verifyEmail(email, email_otp, res);
+        let isOtpVerified = await verifyEmail(email, email_otp);
 
         if(!isOtpVerified) throw `Invalid OTP`;
 
