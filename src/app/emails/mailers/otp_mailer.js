@@ -1,11 +1,14 @@
-const nodeMailer = require('../engine/config/nodemailer');
+const { transporter, renderTemplate } = require('../../engine/config/nodemailer');
 
 const sendOtp = (subject, otp) => {
-    nodeMailer.transporter.sendMail({
+
+    let htmlString = renderTemplate({otp}, '/otp/verify_new_user.ejs');
+
+    transporter.sendMail({
         from: 'dummyemail@gmail.com',
         to: 'dummyreceiveremail@gmail.com',
         subject: subject,
-        text: `This is your OTP - ${otp}`
+        html: htmlString
     }, (err, info) => {
         if(err){
             console.log(err);
@@ -17,5 +20,5 @@ const sendOtp = (subject, otp) => {
 
 module.exports = {
     sendOtp,
-
+    
 }
