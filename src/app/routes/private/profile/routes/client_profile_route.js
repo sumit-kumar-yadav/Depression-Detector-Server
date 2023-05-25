@@ -15,6 +15,7 @@ router.route('/details')
 router.route('/details')
     .put(imageUpload, throwMulterUploadError, validate('putClientDetails'), throwValidationError, clientProfileController.putClientDetails);
 
-
+router.route('/health')
+    .put(validate('putClientHealth'), throwValidationError, clientProfileController.putClientHealth);
 
 module.exports = router;

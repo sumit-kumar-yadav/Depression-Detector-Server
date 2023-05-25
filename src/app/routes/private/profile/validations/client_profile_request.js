@@ -80,6 +80,18 @@ module.exports.validate = (reqType) => {
             ]
         }
 
+        case 'putClientHealth': {
+            return [
+                body('mood')
+                    .optional()
+                    .isIn(["Happy", "Sad", "Anxious", "Depressed", "Stressed", "Angry", "Calm", "Satisfied", "Amushed", "Disgust"])
+                    .withMessage(`Mood can only be either "Happy", "Sad", "Anxious", "Depressed", "Stressed", "Angry", "Calm", "Satisfied", "Amushed" or "Disgust"`),
+                body('quote')
+                    .optional()
+                    .isLength({ min: 3, max: 100 }).withMessage(`Quote can't be less than 3 characters and greater than 100.`),
+            ]
+        }
+
     }
 
 }

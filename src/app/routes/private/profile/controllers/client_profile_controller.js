@@ -96,13 +96,31 @@ const putClientDetails = async (req, res) => {
         return api("Details updated successfully", res, updatedClientDetails, 201);
 
     } catch (e) {
-        console.log(e)
         return apiError(String(e), res, {}, 500);
     }
 }
 
+const putClientHealth = async (req, res) => {
+    try {
+        const { mood, quote } = req.body;
+
+        let clientHealth = await ClientHealth.findOne({user: req.user._id});
+
+        if(mood) clientHealth.mood = mood;
+
+        if(quote) clientHealth.quote = quote;
+
+        await clientHealth.save();
+
+        return api("Details updated successfully", res, clientHealth, 200);
+
+    } catch (e) {
+        return apiError(String(e), res, {}, 500);
+    }
+}
 
 module.exports = {
     postClientDetails,
-    putClientDetails
+    putClientDetails,
+    putClientHealth,
 }
