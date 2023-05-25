@@ -13,6 +13,9 @@ router.route('/signup').post(validate('postSignupEmail'), throwValidationError, 
 // Sign in by email 
 router.route('/signin').post(validate('postSigninEmail'), throwValidationError, EmailAuthController.postSignin);
 
+// Email verificatoin (OTP generation)
+router.route('/create/otp').post(EmailAuthController.postCreateOtp);
+
 
 
 module.exports = router;

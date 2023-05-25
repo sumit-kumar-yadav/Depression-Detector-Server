@@ -2,8 +2,38 @@ const { v4 : uuidv4 } = require('uuid');
 const bcrypt = require('bcryptjs');
 const User = require('../../../../engine/models/user');
 const UserDetail = require('../../../../engine/models/user_details');
+const AuthOtp = require('../../../../engine/models/auth_otp');
 const { generateAuthToken, deleteExpiredTokens } = require('../../../../helpers/handle_jwt_token');
 const { api, apiError } = require('../../../../helpers/format_response');
+const { sendOtp } = require('../../../../emails/mailers/otp_mailer');
+
+
+const verifyEmail = async (email, otp, res) => {
+    try {
+        let authOtp = await AuthOtp.findOne({
+            username: email,
+            otp,
+            is_valid: true
+        });
+
+        if(authOtp){
+            // TODO: check the auth otp is not older than 5 min
+            // if auth otp is older than 5 min, then invalidate the auth otp
+
+            // Delete the current otp 
+            await AuthOtp.deleteOne({
+                username: email,
+                otp
+            });
+            return true
+        }
+        else return false;
+
+    } catch (e) {
+        console.log(e);
+    }
+}
+
 
 const postSignup = async (req, res) => {
     try {
@@ -14,8 +44,13 @@ const postSignup = async (req, res) => {
             gender, timezone,
             phone_code, phone_number,
             confirm_password, 
+            email_otp
 
         } = req.body;
+
+        let isOtpVerified = await verifyEmail(email, email_otp, res);
+
+        if(!isOtpVerified) throw `Invalid OTP`;
 
         if(password != confirm_password) throw "Password mismatched";
 
@@ -27,6 +62,7 @@ const postSignup = async (req, res) => {
             phone_code: phone_code || null,
             phone_number: phone_number || null,
             password: await bcrypt.hash(password, 8),
+            email_verified: true,
             status: 'active',
             timezone: timezone || 'Asia/Kolkata',
             gender
@@ -107,7 +143,34 @@ const postSignin = async (req, res) => {
     }
 }
 
+const postCreateOtp = async (req, res) => {
+    try {
+        // 6 digit otp
+        const otp = Math.random().toString().substr(2, 6);
+
+        const { email } = req.body;
+
+        // Delete the previous created otps
+        await AuthOtp.deleteMany({ username: email });
+
+        await AuthOtp.create({
+            username: email,
+            otp,
+            is_valid: true
+        });
+
+        // Mail the created OTP to the user
+        sendOtp("Verify your email", otp, email);
+
+        return api('OTP is created successfully', res, {}, 201);
+
+    } catch (e) {
+        return apiError(String(e), res, {}, 500);
+    }
+}
+
 module.exports = {
     postSignup,
     postSignin,
+    postCreateOtp,
 }

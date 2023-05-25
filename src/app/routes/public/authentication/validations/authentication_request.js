@@ -25,6 +25,8 @@ module.exports.validate = (reqType) => {
                             return Promise.reject('Email is already taken');
                         }
                     }),
+                body('email_otp')
+                    .notEmpty().withMessage('Please enter the otp sent on your email'),
                 body('phone_number')
                     .optional()
                     .matches(/^\d{10}$/).withMessage('Please enter the valid phone number'),
