@@ -69,6 +69,28 @@ module.exports.validate = (reqType) => {
             ]
         }
 
+        case 'otp': {
+            return [
+                body('email')
+                    .exists().withMessage("Please enter the email address").bail()
+                    .toLowerCase()
+                    .isEmail().withMessage("Please enter the valid email address"),
+            ]
+        }
+
+        case 'putResetPassword': {
+            return [
+                body('email')
+                    .exists().withMessage("Please enter the email address").bail()
+                    .toLowerCase()
+                    .isEmail().withMessage("Please enter the valid email address"),
+                body('new_password')
+                    .notEmpty().withMessage('Please enter the new password').bail()
+                    .isLength({ min: 6, max: 15 }).withMessage('Password must be between 6 and 15 characters').bail()
+                    .matches(/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!@$#%]).*$/).withMessage('Weak password. Password must include atleast 1 upper, 1 lowercase, 1 number and a special characters.'),
+            ]
+        }
+
     }
 
 }

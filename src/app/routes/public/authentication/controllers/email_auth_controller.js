@@ -3,9 +3,10 @@ const bcrypt = require('bcryptjs');
 const User = require('../../../../engine/models/user');
 const UserDetail = require('../../../../engine/models/user_details');
 const AuthOtp = require('../../../../engine/models/auth_otp');
+const Otp = require('../../../../engine/models/otp');
 const { generateAuthToken, deleteExpiredTokens } = require('../../../../helpers/handle_jwt_token');
 const { api, apiError } = require('../../../../helpers/format_response');
-const { sendOtp } = require('../../../../emails/mailers/otp_mailer');
+const { sendAuthOtp, sendOtp } = require('../../../../emails/mailers/otp_mailer');
 
 
 const verifyEmail = async (email, otp) => {
@@ -143,7 +144,7 @@ const postSignin = async (req, res) => {
     }
 }
 
-const postCreateOtp = async (req, res) => {
+const postCreateAuthOtp = async (req, res) => {
     try {
         // 6 digit otp
         const otp = Math.random().toString().substr(2, 6);
@@ -160,9 +161,86 @@ const postCreateOtp = async (req, res) => {
         });
 
         // Mail the created OTP to the user
-        sendOtp("Verify your email", otp, email);
+        sendAuthOtp(otp, email);
 
         return api('OTP is created successfully', res, {}, 201);
+
+    } catch (e) {
+        return apiError(String(e), res, {}, 500);
+    }
+}
+
+const postCreateForgotPasswordOtp = async (req, res) => {
+    try {
+        // 6 digit otp
+        const otp = Math.random().toString().substr(2, 6);
+
+        const { email } = req.body;
+
+        const user = await User.findOne({email});
+
+        if(!user) throw "Invalid email.";
+
+        // Delete the previous created otps
+        await Otp.deleteMany({ user: user._id });
+
+        await Otp.create({
+            user: user._id,
+            otp,
+            is_valid: true
+        });
+
+        // Mail the created OTP to the user
+        sendOtp(otp, user);
+
+        return api('OTP is created successfully', res, {}, 201);
+
+    } catch (e) {
+        return apiError(String(e), res, {}, 500);
+    }
+}
+
+const postVerifyForgotPasswordOtp = async (req, res) => {
+    try {
+        const { otp, email } = req.body;
+
+        const user = await User.findOne({email});
+        if(!user) throw "Client side error. Please send the email."
+
+        const forgotPasswordOtp = await Otp.findOne({user: user._id, otp, is_valid: true});
+
+        if(!forgotPasswordOtp) throw "Invalid OTP.";
+
+        return api('OTP verified successfully.', res, {}, 200);
+
+    } catch (e) {
+        return apiError(String(e), res, {}, 500);
+    }
+}
+
+const putResetPassword = async (req, res) => {
+    try {
+        const { otp, email, new_password, confirm_password } = req.body;
+
+        const user = await User.findOne({email});
+        if(!user) throw "Client side error. Please send the email."
+
+        const forgotPasswordOtp = await Otp.findOne({user: user._id, otp, is_valid: true});
+
+        if(!forgotPasswordOtp) throw "Client side error. Invalid OTP.";
+
+        if(new_password != confirm_password) throw `Password didn't match`;
+
+        user.password = await bcrypt.hash(new_password, 8);
+        await user.save();
+
+        // TODO: check the auth otp is not older than 5 min
+        // if auth otp is older than 5 min, then invalidate the auth otp
+
+        // Delete the current otp 
+        await Otp.deleteOne({user: user._id, otp, is_valid: true});
+
+        return api("Password changed successfully", res, {});
 
     } catch (e) {
         return apiError(String(e), res, {}, 500);
@@ -172,5 +250,8 @@ const postCreateOtp = async (req, res) => {
 module.exports = {
     postSignup,
     postSignin,
-    postCreateOtp,
+    postCreateAuthOtp,
+    postCreateForgotPasswordOtp,
+    postVerifyForgotPasswordOtp,
+    putResetPassword,
 }
