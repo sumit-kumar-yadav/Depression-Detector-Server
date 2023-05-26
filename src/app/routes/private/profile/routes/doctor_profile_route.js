@@ -15,6 +15,9 @@ router.route('/details')
 router.route('/details')
     .put(imageUpload, throwMulterUploadError, validate('putDoctorDetails'), throwValidationError, doctorProfileController.putDoctorDetails);
 
+router.route('/get/all')
+    .get(doctorProfileController.getAllDoctors);
+
 
 
 module.exports = router;
