@@ -1,5 +1,4 @@
 const DoctorDetail = require('../../../../engine/models/doctor_details');
-const User = require('../../../../engine/models/user');
 const UserDetail = require('../../../../engine/models/user_details');
 const { v4 : uuidv4 } = require('uuid');
 const { api, apiError } = require('../../../../helpers/format_response');
@@ -108,30 +107,8 @@ const putDoctorDetails = async (req, res) => {
     }
 }
 
-const getAllDoctors = async (req, res) => {
-    try {
-        
-        const userDetails = await UserDetail.find({role: 'doctor'})
-                                .populate('user_details');
-
-        const doctors = await Promise.all(userDetails.map(async (userDetail)=>{
-            let user = await User.findById(userDetail.user);
-            user = user.toJSON();
-            user.role = userDetail.role;
-            user.details = userDetail.user_details;
-            return user;
-        }))
-
-        return api("All doctors fetched successfully", res, doctors);
-
-    } catch (e) {
-        return apiError(String(e), res, {}, 500);
-    }
-}
-
 
 module.exports = {
     postDoctorDetails,
     putDoctorDetails,
-    getAllDoctors,
 }
