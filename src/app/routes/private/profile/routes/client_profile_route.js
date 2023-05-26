@@ -18,4 +18,7 @@ router.route('/details')
 router.route('/health')
     .put(validate('putClientHealth'), throwValidationError, clientProfileController.putClientHealth);
 
+router.route('/get/all')
+    .get(clientProfileController.getAllClients);
+
 module.exports = router;
