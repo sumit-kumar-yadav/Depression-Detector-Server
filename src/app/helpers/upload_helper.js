@@ -24,7 +24,7 @@ const getUploadInstance = (fieldName) => {
 }
 
 const processBufferImage = async (buffer) => (
-    await sharp(buffer).resize({width: 250, height: 250}).png().toBuffer()
+    await sharp(buffer).resize({width: 750, height: 750}).png().toBuffer()
 )
 
 module.exports = {

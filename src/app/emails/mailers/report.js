@@ -3,7 +3,7 @@ const env = require('../../engine/config/env');
 
 const sendReportToClient = (doctor, client, report) => {
 
-    let htmlString = renderTemplate({doctor, client, report, reportImage: report.file.toString('base64')}, '/report/client_report.ejs');
+    let htmlString = renderTemplate({doctor, client, report}, '/report/client_report.ejs');
     
     transporter.sendMail({
         from: env.smtp.auth.user,
@@ -12,7 +12,8 @@ const sendReportToClient = (doctor, client, report) => {
         html: htmlString,
         attachments: [{
             filename: 'report.jpg',
-            content: report.file // Attach the buffer directly
+            content: report.file, // Attach the buffer directly
+            contentDisposition: 'attachment',
         }]
     }, (err, info) => {
         if(err){
