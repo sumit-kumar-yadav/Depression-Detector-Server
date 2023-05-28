@@ -1,7 +1,7 @@
 const User = require('../../../../engine/models/user');
 const Appointment = require('../../../../engine/models/appointment');
 const { api, apiError } = require('../../../../helpers/format_response');
-const { sendRequestAppointmentToDr, sendAppointmentStatusToClient } = require('../../../../emails/mailers/appointment');
+const { sendRequestAppointmentToDr, sendAppointmentStatusToClient, sendAppointmentStatusToDr } = require('../../../../emails/mailers/appointment');
 
 const checkExpiredAppointments = async (req) => {
     try {
@@ -190,6 +190,10 @@ const putCancelAppointment = async (req, res) => {
         appointment.appointment_status = "cancelled-by-client";
 
         await appointment.save();
+
+        const client = req.user;
+        const doctor = await User.findById(doctorId);
+        sendAppointmentStatusToDr(doctor, client, appointment.appointment_status);
 
         return api("Appointment is cancelled.", res, appointment);
 

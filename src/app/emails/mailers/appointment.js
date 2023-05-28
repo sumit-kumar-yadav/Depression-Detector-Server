@@ -36,7 +36,25 @@ const sendAppointmentStatusToClient = (doctor, client, status) => {
     })
 }
 
+const sendAppointmentStatusToDr = (doctor, client, status) => {
+    let htmlString = renderTemplate({doctor, client, status}, '/appointment/doctor_appointment_status.ejs');
+
+    transporter.sendMail({
+        from: env.smtp.auth.user,
+        to: doctor.email,
+        subject: "Appointment status update",
+        html: htmlString
+    }, (err, info) => {
+        if(err){
+            console.log(err);
+        }else{
+            console.log('Email sent to doctor: ' + info.response);
+        }
+    })
+}
+
 module.exports = {
     sendRequestAppointmentToDr,
-    sendAppointmentStatusToClient
+    sendAppointmentStatusToClient,
+    sendAppointmentStatusToDr
 }
