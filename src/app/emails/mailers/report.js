@@ -1,0 +1,28 @@
+const { transporter, renderTemplate } = require('../../engine/config/nodemailer');
+const env = require('../../engine/config/env');
+
+const sendReportToClient = (doctor, client, report) => {
+
+    let htmlString = renderTemplate({doctor, client, report, reportImage: report.file.toString('base64')}, '/report/client_report.ejs');
+    
+    transporter.sendMail({
+        from: env.smtp.auth.user,
+        to: client.email,
+        subject: "Mental Health Report",
+        html: htmlString,
+        attachments: [{
+            filename: 'report.jpg',
+            content: report.file // Attach the buffer directly
+        }]
+    }, (err, info) => {
+        if(err){
+            console.log(err);
+        }else{
+            console.log('Email sent to client: ' + info.response);
+        }
+    })
+}
+
+module.exports = {
+    sendReportToClient,
+}
