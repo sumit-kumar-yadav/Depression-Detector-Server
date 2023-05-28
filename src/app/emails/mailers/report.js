@@ -13,6 +13,7 @@ const sendReportToClient = (doctor, client, report) => {
         attachments: [{
             filename: 'report.jpg',
             content: report.file, // Attach the buffer directly
+            cid: 'report', // Use the same unique identifier as in the HTML image source
             contentDisposition: 'attachment',
         }]
     }, (err, info) => {
