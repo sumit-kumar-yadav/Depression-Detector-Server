@@ -14,7 +14,8 @@ const appointmentSchema = new mongoose.Schema({
     },
     appointment_status: {
         type: String,
-        enum: ["pending", "accepted", "rejected", "completed", "expired", "cancelled-by-client", "cancelled-by-doctor"]
+        default: "pending",
+        enum: ["pending", "accepted", "rejected", "completed", "expired", "cancelled-by-client"]
     },
     appointment_date: {   // Store date and time
         type: Date,
