@@ -10,10 +10,10 @@ const clientProfileController = require('../controllers/client_profile_controlle
 
 
 router.route('/details')
-    .post(imageUpload, throwMulterUploadError, validate('postClientDetails'), throwValidationError, clientProfileController.postClientDetails);
+    .post(imageUpload('avatar'), throwMulterUploadError, validate('postClientDetails'), throwValidationError, clientProfileController.postClientDetails);
 
 router.route('/details')
-    .put(imageUpload, throwMulterUploadError, validate('putClientDetails'), throwValidationError, clientProfileController.putClientDetails);
+    .put(imageUpload('avatar'), throwMulterUploadError, validate('putClientDetails'), throwValidationError, clientProfileController.putClientDetails);
 
 router.route('/health')
     .put(validate('putClientHealth'), throwValidationError, clientProfileController.putClientHealth);

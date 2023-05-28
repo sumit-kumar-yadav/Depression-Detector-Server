@@ -10,10 +10,10 @@ const doctorProfileController = require('../controllers/doctor_profile_controlle
 
 
 router.route('/details')
-    .post(imageUpload, throwMulterUploadError, validate('postDoctorDetails'), throwValidationError, doctorProfileController.postDoctorDetails);
+    .post(imageUpload('avatar'), throwMulterUploadError, validate('postDoctorDetails'), throwValidationError, doctorProfileController.postDoctorDetails);
 
 router.route('/details')
-    .put(imageUpload, throwMulterUploadError, validate('putDoctorDetails'), throwValidationError, doctorProfileController.putDoctorDetails);
+    .put(imageUpload('avatar'), throwMulterUploadError, validate('putDoctorDetails'), throwValidationError, doctorProfileController.putDoctorDetails);
 
 
 

@@ -3,7 +3,7 @@ const multer = require('multer');
 const sharp = require('sharp');
 
 
-const getUploadInstance = () => {
+const getUploadInstance = (fieldName) => {
     try {
 
         const upload = multer({
@@ -16,7 +16,7 @@ const getUploadInstance = () => {
             }
         });
 
-        return upload.single('avatar');
+        return upload.single(fieldName);
 
     } catch (e) {
         return apiError(String(e), res, {});
@@ -28,6 +28,6 @@ const processBufferImage = async (buffer) => (
 )
 
 module.exports = {
-    imageUpload: getUploadInstance(),
+    imageUpload: getUploadInstance,
     processBufferImage
 }

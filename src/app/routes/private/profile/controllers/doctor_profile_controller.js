@@ -81,7 +81,7 @@ const putDoctorDetails = async (req, res) => {
             location: (latitude && longitude) ? {
                 type: 'Point',
                 coordinates: [parseFloat(longitude), parseFloat(latitude)]
-            }   : clientDetails.location,
+            }   : doctorDetails.location,
             degree: req.body.degree || doctorDetails.degree,  // Arrray
             highest_qualification: req.body.highest_qualification,
             specialist: req.body.specialist,

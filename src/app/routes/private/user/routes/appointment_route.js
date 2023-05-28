@@ -6,7 +6,7 @@ const { validate } = require('../validations/appointment_request');
 
 
 // Controllers
-const appointmentController = require('../controllers/appointment');
+const appointmentController = require('../controllers/appointment_controller');
 
 
 router.route('/request/:doctorId')
