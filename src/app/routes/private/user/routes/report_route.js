@@ -12,5 +12,13 @@ const reportController = require('../controllers/report_controller');
 router.route('/create/:appointmentId')
     .post(imageUpload('file'), throwMulterUploadError, validate('postReport'), throwValidationError, reportController.postReport);
 
+router.route('/get/all-reports-of-doctor')
+    .get(reportController.getAllReportsOfADr);
+
+router.route('/get/all-reports-of-client')
+    .get(reportController.getAllReportsOfClient);
+
+router.route('/get/all-reports-of-client-doctor')
+    .get(validate('getAllReportsOfClientDoctor'), throwValidationError, reportController.getAllReportsOfClientDoctor);
 
 module.exports = router;

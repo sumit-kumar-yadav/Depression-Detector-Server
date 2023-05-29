@@ -1,4 +1,4 @@
-const { body, param } = require('express-validator');
+const { body, param, query } = require('express-validator');
 
 module.exports.validate = (reqType) => {
 
@@ -15,6 +15,17 @@ module.exports.validate = (reqType) => {
                 body('suggestion')
                     .notEmpty().withMessage('Please enter the suggestion for client').bail()
                     .isLength({ min: 10, max: 500 }).withMessage(`Invalid suggestion`),
+            ]
+        }
+
+        case 'getAllReportsOfClientDoctor': {
+            return [
+                query('clientId')
+                    .notEmpty().withMessage('Client id cannot be empty').bail()
+                    .isLength({ min: 10, max: 50 }).withMessage(`Invalid Appointment id`),
+                query('doctorId')
+                    .notEmpty().withMessage('Doctor id cannot be empty').bail()
+                    .isLength({ min: 10, max: 50 }).withMessage(`Invalid Appointment id`),
             ]
         }
 

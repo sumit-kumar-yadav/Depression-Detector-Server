@@ -50,7 +50,51 @@ const postReport = async (req, res) => {
     }
 }
 
+const getAllReportsOfADr = async (req, res) => {
+    try {
+        let reports = await Report.find({
+            doctor: req.user._id
+        });
+        
+        return api("All the reports of a doctor are: ", res, reports);
+
+    } catch (e) {
+        return apiError(String(e), res, {}, 500);
+    }
+}
+
+const getAllReportsOfClient = async (req, res) => {
+    try {
+        
+        let reports = await Report.find({
+            client: req.user._id
+        });
+
+        return api("All the reports of client are: ", res, reports);
+
+    } catch (e) {
+        return apiError(String(e), res, {}, 500);
+    }
+}
+
+const getAllReportsOfClientDoctor = async (req, res) => {
+    try {
+        
+        let reports = await Report.find({
+            client: req.query.clientId,
+            doctor: req.query.doctorId
+        });
+
+        return api("All the reports of a client by a doctor are: ", res, reports);
+
+    } catch (e) {
+        return apiError(String(e), res, {}, 500);
+    }
+}
 
 module.exports = {
     postReport,
+    getAllReportsOfADr,
+    getAllReportsOfClient,
+    getAllReportsOfClientDoctor
 }
