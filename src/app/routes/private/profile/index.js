@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
+const { allowedRolesMiddleware } = require('../../../engine/middlewares/role_permission_middleware');
+
 
 // Routes
 const userProfileRoute = require('./routes/user_profile_route');
@@ -8,10 +10,10 @@ const clientProfileRoute = require('./routes/client_profile_route');
 const doctorProfileRoute = require('./routes/doctor_profile_route');
 
 
-router.use('/user', userProfileRoute);
+router.use('/user', allowedRolesMiddleware(["client", "doctor"]), userProfileRoute);
 
-router.use('/client', clientProfileRoute);
+router.use('/client', allowedRolesMiddleware(["client"]), clientProfileRoute);
 
-router.use('/doctor', doctorProfileRoute);
+router.use('/doctor', allowedRolesMiddleware(["doctor"]), doctorProfileRoute);
 
 module.exports = router;
