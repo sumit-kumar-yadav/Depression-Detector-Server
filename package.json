@@ -6,12 +6,15 @@
   "scripts": {
     "start": "nodemon index.js",
     "dev": "node index.js train",
+    "client": "cd react-test && npm start",
+    "prod": "concurrently \"npm run start\" \"npm run client\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Sumit Yadav",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "concurrently": "^8.0.1",
     "connect-mongo": "^4.6.0",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
