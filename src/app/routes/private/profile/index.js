@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
+const { allowedRolesMiddleware } = require('../../../engine/middlewares/role_permission_middleware');
+
 
 // Routes
 const userProfileRoute = require('./routes/user_profile_route');
